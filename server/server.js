@@ -1,28 +1,36 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const doubtRoutes = require('./routes/doubtRoutes');
-const noteRoutes = require('./routes/noteRoutes');
-const quizRoutes = require('./routes/quizRoutes');
+// server.js
 
-dotenv.config();
+// Import necessary packages
+const express = require('express');
+const cors = require('cors');
+
+// Create an Express app
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Define the port
+const port = process.env.PORT || 5000;
 
-// Routes
-app.use('/api/doubts', doubtRoutes);
-app.use('/api/notes', noteRoutes);
-app.use('/api/quizzes', quizRoutes);
+// Use middleware
+app.use(cors()); // Enable Cross-Origin Request Sharing (CORS)
+app.use(express.json()); // Middleware to parse JSON data in requests
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log(err));
+// Define a sample route
+app.get('/', (req, res) => {
+  res.send('Hello, World! Your Express app is running.');
+});
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Another example route
+app.get('/api', (req, res) => {
+  res.json({ message: "This is a sample API response" });
+});
+
+// Define a POST route example
+app.post('/api/data', (req, res) => {
+  const data = req.body; // Access the sent data
+  res.json({ message: "Data received successfully", data });
+});
+
+// Start the server and listen on the defined port
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
